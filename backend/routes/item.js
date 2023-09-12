@@ -10,20 +10,22 @@ router.get("/todos", (req, res, next) => {
 });
 
 router.post("/todos", async (req, res, next) => {
-    // if (req.body.action) {
-    const item = new Todo(req.body.action);
-    await item.save();
-    // } else {
-    //     res.json({
-    //         error: "The input field is empty",
-    //     });
-    // }
+    if (req.body.action) {
+        // console.log(req.body);
+        const item = new Todo(req.body);
+        await item.save();
+        return res.send("Success");
+    } else {
+        res.json({
+            error: "The input field is empty",
+        });
+    }
 });
 
-router.delete("/todos/:id", (req, res, next) => {
-    Todo.findOneAndDelete({ _id: req.params.id })
-        .then((data) => res.json(data))
-        .catch(next);
+router.delete("/todos/:id", async (req, res, next) => {
+    const { id } = req.params;
+    const todo = await Todo.findByIdAndDelete(id);
+    res.send("Delete Success");
 });
 
 module.exports = router;
