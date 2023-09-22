@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./assets/index.css";
 import Root from "./routes/root";
 import ErrorPage from "./pages/errorHandler/error-page";
-
+import Register from "./pages/register/register";
 import Contact from "./routes/contact";
 
 const router = createBrowserRouter([
@@ -18,6 +18,10 @@ const router = createBrowserRouter([
                 element: <Contact />,
             },
         ],
+    },
+    {
+        path: "/register",
+        element: <Register />,
     },
 ]);
 
