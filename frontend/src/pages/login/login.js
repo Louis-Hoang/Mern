@@ -18,29 +18,35 @@ export default function Register() {
             };
         });
     };
-    const handleRegistration = async (e) => {
-        //REVISE THIS LATER
+    const handleLogin = async (e) => {
+        //revise this later
         e.preventDefault();
         const { username, password, email } = credential;
         try {
-            const response = await Axios.post("/register", {
+            const response = await Axios.post("/login", {
                 username: username,
                 password: password,
                 email: email,
             });
-            console.log(response);
             setCredential({ username: "", password: "", email: "" });
-            if (response.data === "User create") {
+            if (response.data === "Successfully Authenticated") {
                 return navigate("/content"); //use JWT when done
+            } else {
+                // console.log("Not correct");
+                return navigate("/login");
             }
         } catch (e) {
+            console.log("Error");
             console.log(e);
+            setCredential({ username: "", password: "", email: "" });
+            return navigate("/login");
         }
     };
+
     return (
         <div>
-            <h1>Register Form</h1>
-            <form onSubmit={handleRegistration}>
+            <h1>Login Form</h1>
+            <form onSubmit={handleLogin}>
                 <label htmlFor="Username">Username</label>
                 <input
                     type="text"
@@ -49,6 +55,7 @@ export default function Register() {
                     id="username"
                     onChange={handleChange}
                     value={credential.username}
+                    autoComplete="off"
                 />
                 <label htmlFor="Password">Password</label>
                 <input
@@ -58,6 +65,7 @@ export default function Register() {
                     id="password"
                     onChange={handleChange}
                     value={credential.password}
+                    autoComplete="off"
                 />
                 <label htmlFor="Email">Email</label>
                 <input
@@ -67,6 +75,7 @@ export default function Register() {
                     id="email"
                     onChange={handleChange}
                     value={credential.email}
+                    autoComplete="off"
                 />
                 <button>Add Item</button>
             </form>

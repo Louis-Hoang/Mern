@@ -5,6 +5,8 @@ import "./assets/index.css";
 import Root from "./routes/root";
 import ErrorPage from "./pages/errorHandler/error-page";
 import Register from "./pages/register/register";
+import Login from "./pages/login/login";
+import Content from "./pages/content/content";
 import Contact from "./routes/contact";
 
 const router = createBrowserRouter([
@@ -22,6 +24,14 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <Register />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
+    },
+    {
+        path: "/content",
+        element: <Content />,
     },
 ]);
 

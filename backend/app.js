@@ -93,7 +93,7 @@ app.post("/register", async (req, res, next) => {
 app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) throw err;
-        if (!user) res.send("No User Exists");
+        if (!user) res.status(200).send("Authentication Failed");
         else {
             req.logIn(user, (err) => {
                 if (err) throw err;
@@ -103,6 +103,16 @@ app.post("/login", (req, res, next) => {
         }
     })(req, res, next);
 });
+
+// app.post(
+//     "/login",
+//     passport.authenticate("local", {
+
+//         failureMessage: true,
+//         successRedirect: "/content",
+//     }),
+//     (req, res, next) => {}
+// );
 
 // Handles any requests that don't match the ones above
 app.get("*", (req, res) => {
