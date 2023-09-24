@@ -1,7 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./assets/index.css";
+
+import "bootstrap/dist/css/bootstrap.css"; //use .min for production
+import "bootstrap/dist/js/bootstrap.bundle.js";
+
+import NavbarComp from "./components/Navbar";
 import Root from "./pages/Root/Root";
 import ErrorPage from "./pages/ErrorHandler/error-page";
 import Register from "./pages/Register/Register";
@@ -41,6 +45,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
+        <NavbarComp />
         <RouterProvider router={router} />
     </React.StrictMode>
 );

@@ -1,6 +1,7 @@
 // import { Routes, Route } from "react-router-dom";
 // import Register from "../pages/Register/Register";
 // import Login from "../pages/Login/Login";
+// import NavbarComp from "../../components/Navbar";
 
 export default function Root() {
     return (
