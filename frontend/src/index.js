@@ -1,29 +1,25 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
+// import Axios from "axios";
+// import { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.css"; //use .min for production
 import "bootstrap/dist/js/bootstrap.bundle.js";
 
-import NavbarComp from "./components/Navbar";
+import Navbar from "./components/Navbar";
 import Root from "./pages/Root/Root";
 import ErrorPage from "./pages/ErrorHandler/error-page";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import Content from "./pages/Content/Content";
-
 import ProtectedRoute from "./utils/ProtectedRoutes/ProtectedRoutes";
+
+import { UserStateProvider } from "./contexts/UserContext/UserContext"; // Import the GlobalStateProvider
 const router = createBrowserRouter([
     {
         path: "/*",
         element: <Root />,
         errorElement: <ErrorPage />,
-        // children: [
-        //     {
-        //         path: "contacts/:contactId",
-        //         element: <Contact />,
-        //     },
-        // ],
     },
     {
         path: "/register",
@@ -45,7 +41,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <NavbarComp />
-        <RouterProvider router={router} />
+        <UserStateProvider>
+            <Navbar />
+            <RouterProvider router={router} />
+        </UserStateProvider>
     </React.StrictMode>
 );
