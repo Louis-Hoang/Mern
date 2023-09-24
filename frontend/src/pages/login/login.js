@@ -67,17 +67,8 @@ export default function Register() {
                     value={credential.password}
                     autoComplete="off"
                 />
-                <label htmlFor="Email">Email</label>
-                <input
-                    type="email"
-                    placeholder="email"
-                    name="email"
-                    id="email"
-                    onChange={handleChange}
-                    value={credential.email}
-                    autoComplete="off"
-                />
-                <button>Add Item</button>
+
+                <button>Login</button>
             </form>
         </div>
     );

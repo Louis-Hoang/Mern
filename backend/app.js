@@ -95,24 +95,34 @@ app.post("/login", (req, res, next) => {
         if (err) throw err;
         if (!user) res.status(200).send("Authentication Failed");
         else {
-            req.logIn(user, (err) => {
+            req.login(user, (err) => {
                 if (err) throw err;
                 res.send("Successfully Authenticated");
                 console.log(req.user);
+                console.log("login sucess");
             });
         }
     })(req, res, next);
 });
 
-// app.post(
-//     "/login",
-//     passport.authenticate("local", {
+app.post("/auth", (req, res, next) => {
+    //temp
+    if (!req.isAuthenticated()) {
+        res.send("Must be login first");
+        console.log("Must be logged in");
+    } else {
+        res.send("Logged in");
+    }
+});
 
-//         failureMessage: true,
-//         successRedirect: "/content",
-//     }),
-//     (req, res, next) => {}
-// );
+app.post("/logout", (req, res, next) => {
+    req.logout(function (err) {
+        if (err) {
+            return next(err);
+        }
+    });
+    res.send("Logout success");
+});
 
 // Handles any requests that don't match the ones above
 app.get("*", (req, res) => {

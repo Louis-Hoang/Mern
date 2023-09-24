@@ -3,12 +3,12 @@ import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./assets/index.css";
 import Root from "./routes/root";
-import ErrorPage from "./pages/errorHandler/error-page";
-import Register from "./pages/register/register";
-import Login from "./pages/login/login";
-import Content from "./pages/content/content";
+import ErrorPage from "./pages/ErrorHandler/error-page";
+import Register from "./pages/Register/Register";
+import Login from "./pages/Login/Login";
+import Content from "./pages/Content/Content";
 import Contact from "./routes/contact";
-
+import ProtectedRoute from "./utils/ProtectedRoutes/ProtectedRoutes";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -31,7 +31,11 @@ const router = createBrowserRouter([
     },
     {
         path: "/content",
-        element: <Content />,
+        element: (
+            <ProtectedRoute>
+                <Content />
+            </ProtectedRoute>
+        ),
     },
 ]);
 
