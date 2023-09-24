@@ -1,4 +1,6 @@
-import { Outlet } from "react-router-dom";
+// import { Routes, Route } from "react-router-dom";
+// import Register from "../pages/Register/Register";
+// import Login from "../pages/Login/Login";
 
 export default function Root() {
     return (
@@ -31,9 +33,6 @@ export default function Root() {
                         </li>
                     </ul>
                 </nav>
-            </div>
-            <div id="detail">
-                <Outlet />
             </div>
         </>
     );
