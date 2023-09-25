@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserState } from "../../contexts/UserContext/UserContext";
 import Axios from "axios";
 const ProtectedRoute = (props) => {
     const navigate = useNavigate();
     const { userState, setUserState } = useUserState();
-    // const [isLoggedIn, setIsLoggedIn] = useState(false);
     const checkLogIn = async () => {
         const response = await Axios.post("/auth");
         if (response.data === "Must be login first") {
