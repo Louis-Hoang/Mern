@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { useUserState } from "../../contexts/UserContext/UserContext";
+import React, { useState } from "react";
+
 import { LoginAPI } from "../../apis/UserAPI";
 
-export default function Login() {
-    const { userState, setUserState } = useUserState();
+export default function Login({ change }) {
     const navigate = useNavigate();
     const [credential, setCredential] = useState({
         username: "",
@@ -22,43 +21,15 @@ export default function Login() {
     };
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = Login(credential);
+        const response = await LoginAPI(credential);
         if (response) {
-            setUserState(true);
+            change(true);
             return navigate("/content", { replace: true });
         }
-        setUserState(false);
+
         return navigate("/login");
-        //revise this later
-        // e.preventDefault();
-        // const { username, password, email } = credential;
-        // try {
-        //     const response = await Axios.post("/login", {
-        //         username: username,
-        //         password: password,
-        //         email: email,
-        //     });
-        //     setCredential({ username: "", password: "", email: "" });
-        //     if (response.data === "Successfully Authenticated") {
-        //         return navigate("/content"); //use JWT when done
-        //     } else {
-        //         // console.log("Not correct");
-        //         return navigate("/login");
-        //     }
-        // } catch (e) {
-        //     console.log("Error");
-        //     console.log(e);
-        //     setCredential({ username: "", password: "", email: "" });
-        //     return navigate("/login");
-        // }
     };
 
-    useEffect(() => {
-        console.log(userState);
-        // if (userState) {
-        //     return navigate("/content");
-        // }
-    }, []);
     return (
         <div>
             <h1>Login Form</h1>

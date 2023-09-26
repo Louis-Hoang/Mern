@@ -18,10 +18,10 @@ async function LoginAPI(credential) {
             email: email,
         });
 
-        if (response.data === "Successfully Authenticated") {
-            return true; //use JWT when done
+        if (response.data.auth) {
+            return true;
         } else {
-            // console.log("Not correct");
+            console.log(response.data.msg);
             return false;
         }
     } catch (e) {
@@ -30,4 +30,15 @@ async function LoginAPI(credential) {
         return false;
     }
 }
-export { LogoutAPI, LoginAPI };
+
+async function isLoggedIn() {
+    const response = await Axios.post("/auth");
+    if (response.data.auth) {
+        console.log(response);
+        // console.log("Log in already");
+        return true;
+    }
+    // console.log("Log in pls");
+    return false;
+}
+export { LogoutAPI, LoginAPI, isLoggedIn };

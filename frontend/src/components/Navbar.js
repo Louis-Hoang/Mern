@@ -1,18 +1,21 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useUserState } from "../contexts/UserContext/UserContext";
+// import { useState } from "react";
 import { LogoutAPI } from "../apis/UserAPI";
 import { Outlet, useNavigate } from "react-router-dom";
 
-export default function Navigation() {
+export default function Navigation({ status, change }) {
     const navigate = useNavigate();
-    const { userState, setUserState } = useUserState();
-    const handleLogout = () => {
-        LogoutAPI();
-        setUserState(false);
+    const handleLogout = async () => {
+        await LogoutAPI();
+        change(false);
         return navigate("/");
     };
+    // const handleState = () => {
+    //     setUserState(true);
+    // };
+    // const checkLoggedIn = async () => {};
     return (
         <>
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
@@ -30,23 +33,26 @@ export default function Navigation() {
                                 Home
                             </Nav.Link>
                         </Nav>
-
-                        {!userState ? (
-                            <Nav>
-                                <Nav.Link onClick={() => navigate("/login")}>
-                                    Login
-                                </Nav.Link>
-                                <Nav.Link onClick={() => navigate("/register")}>
-                                    Register
-                                </Nav.Link>
-                            </Nav>
-                        ) : (
-                            <Nav>
+                        <Nav>
+                            {!status ? (
+                                <>
+                                    <Nav.Link
+                                        onClick={() => navigate("/login")}
+                                    >
+                                        Login
+                                    </Nav.Link>
+                                    <Nav.Link
+                                        onClick={() => navigate("/register")}
+                                    >
+                                        Register
+                                    </Nav.Link>
+                                </>
+                            ) : (
                                 <Nav.Link onClick={handleLogout}>
                                     Logout
                                 </Nav.Link>
-                            </Nav>
-                        )}
+                            )}
+                        </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

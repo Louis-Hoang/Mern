@@ -1,25 +1,24 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUserState } from "../../contexts/UserContext/UserContext";
-import Axios from "axios";
+import { isLoggedIn } from "../../apis/UserAPI"; // Import the isLoggedIn function
+
 const ProtectedRoute = (props) => {
     const navigate = useNavigate();
-    const { userState, setUserState } = useUserState();
-    const checkLogIn = async () => {
-        const response = await Axios.post("/auth");
-        if (response.data === "Must be login first") {
-            console.log(response);
-            console.log("Log in please");
-            setUserState(false);
-            return navigate("/login");
-        }
-        console.log("Log in already");
-        setUserState(true);
-    };
+
     useEffect(() => {
-        checkLogIn();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userState]);
-    return <React.Fragment>{userState ? props.children : null}</React.Fragment>;
+        async function status() {
+            const res = await isLoggedIn();
+            if (!res) {
+                console.log("Not logged in");
+                navigate("/login", { replace: true });
+            }
+        }
+
+        status(); // Call the status function
+    }, [navigate]);
+
+    console.log("Rendering ProtectedRoute");
+    return <React.Fragment>{props.children}</React.Fragment>;
 };
+
 export default ProtectedRoute;

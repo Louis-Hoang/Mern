@@ -92,26 +92,37 @@ app.post("/register", async (req, res, next) => {
 
 app.post("/login", (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
-        if (err) throw err;
-        if (!user) res.status(200).send("Authentication Failed");
-        else {
-            req.login(user, (err) => {
-                if (err) throw err;
-                res.send("Successfully Authenticated");
-                console.log(req.user);
-                console.log("login sucess");
-            });
+        try {
+            if (!user)
+                res.json({
+                    auth: req.isAuthenticated(),
+                    msg: "Username or Password is incorrect",
+                });
+            else {
+                req.login(user, (err) => {
+                    if (err) throw err;
+                    res.json({ auth: req.isAuthenticated() });
+                    console.log(req.user);
+                    console.log("login sucess");
+                });
+            }
+        } catch (e) {
+            console.log(e);
         }
     })(req, res, next);
 });
 
-app.post("/auth", (req, res, next) => {
-    //temp
-    if (!req.isAuthenticated()) {
-        res.send("Must be login first");
-        console.log("Must be logged in");
-    } else {
-        res.send("Logged in");
+app.post("/auth", function (req, res, next) {
+    try {
+        if (req.isAuthenticated()) {
+            return res.json({
+                auth: true,
+                // user: { first_name: req.user.first_name },
+            });
+        }
+        return res.json({ auth: false, message: "cannot authenticate" });
+    } catch (e) {
+        console.log(e);
     }
 });
 
