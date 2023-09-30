@@ -117,7 +117,7 @@ app.post("/auth", function (req, res, next) {
         if (req.isAuthenticated()) {
             return res.json({
                 auth: true,
-                // user: { first_name: req.user.first_name },
+                user: req.user.username,
             });
         }
         return res.json({ auth: false, message: "cannot authenticate" });

@@ -12,10 +12,6 @@ export default function Navigation({ status, change }) {
         change(false);
         return navigate("/");
     };
-    // const handleState = () => {
-    //     setUserState(true);
-    // };
-    // const checkLoggedIn = async () => {};
     return (
         <>
             <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
@@ -34,7 +30,7 @@ export default function Navigation({ status, change }) {
                             </Nav.Link>
                         </Nav>
                         <Nav>
-                            {!status ? (
+                            {!status.login ? (
                                 <>
                                     <Nav.Link
                                         onClick={() => navigate("/login")}
@@ -48,9 +44,12 @@ export default function Navigation({ status, change }) {
                                     </Nav.Link>
                                 </>
                             ) : (
-                                <Nav.Link onClick={handleLogout}>
-                                    Logout
-                                </Nav.Link>
+                                <>
+                                    <Nav.Link>{status.username}</Nav.Link>
+                                    <Nav.Link onClick={handleLogout}>
+                                        Logout
+                                    </Nav.Link>
+                                </>
                             )}
                         </Nav>
                     </Navbar.Collapse>

@@ -1,7 +1,7 @@
 export default function Content() {
     return (
         <div>
-            <h1>Content Page after Login</h1>
+            <h1>Welcome new User</h1>
         </div>
     );
 }

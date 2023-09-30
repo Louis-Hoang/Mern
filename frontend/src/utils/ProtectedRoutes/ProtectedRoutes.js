@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { isLoggedIn } from "../../apis/UserAPI"; // Import the isLoggedIn function
+import { isLoggedIn } from "../../apis/UserAPI";
 
 const ProtectedRoute = (props) => {
     const navigate = useNavigate();
@@ -8,7 +8,7 @@ const ProtectedRoute = (props) => {
     useEffect(() => {
         async function status() {
             const res = await isLoggedIn();
-            if (!res) {
+            if (!res.status) {
                 console.log("Not logged in");
                 navigate("/login", { replace: true });
             }

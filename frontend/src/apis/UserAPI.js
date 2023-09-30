@@ -19,10 +19,10 @@ async function LoginAPI(credential) {
         });
 
         if (response.data.auth) {
-            return true;
+            return { status: true, username: username };
         } else {
             console.log(response.data.msg);
-            return false;
+            return { status: false };
         }
     } catch (e) {
         console.log("Error");
@@ -34,11 +34,9 @@ async function LoginAPI(credential) {
 async function isLoggedIn() {
     const response = await Axios.post("/auth");
     if (response.data.auth) {
-        console.log(response);
-        // console.log("Log in already");
-        return true;
+        console.log(response.data);
+        return { status: response.data.auth, username: response.data.user };
     }
-    // console.log("Log in pls");
-    return false;
+    return { status: response.data.auth, username: "" };
 }
 export { LogoutAPI, LoginAPI, isLoggedIn };

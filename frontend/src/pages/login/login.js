@@ -23,9 +23,9 @@ export default function Login({ change }) {
     const handleLogin = async (e) => {
         e.preventDefault();
         const response = await LoginAPI(credential);
-        if (response) {
-            change(true);
-            return navigate("/content", { replace: true });
+        if (response.status) {
+            change(true, response.username);
+            return navigate(`/${response.username}`, { replace: true }); //pass username as param
         }
 
         return navigate("/login");

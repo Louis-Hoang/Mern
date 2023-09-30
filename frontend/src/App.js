@@ -1,11 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import {
-    createBrowserRouter,
-    RouterProvider,
-    Outlet,
-    Navigate,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css"; //use .min for production
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import "./assets/index.css";
@@ -15,7 +10,7 @@ import ErrorPage from "./pages/ErrorHandler/error-page";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import Content from "./pages/Content/Content";
-
+import UserInfo from "./pages/UserInfo/UserInfo";
 import ProtectedRoute from "./utils/ProtectedRoutes/ProtectedRoutes";
 
 import { useState } from "react";
@@ -24,15 +19,12 @@ import { isLoggedIn } from "./apis/UserAPI";
 const App = () => {
     const [userState, setUserState] = useState(async () => {
         const res = await isLoggedIn();
-        if (res) {
-            console.log("render logout");
-            return setUserState(true);
-        }
-        console.log("render login");
-        return setUserState(false);
+        return setUserState({ username: res.username, login: res.status });
     });
-    const handleState = (bool) => {
-        setUserState(bool);
+
+    const handleState = (bool, credential) => {
+        const newState = { ...userState, login: bool, username: credential };
+        setUserState(newState);
     };
     const router = createBrowserRouter([
         {
@@ -57,6 +49,14 @@ const App = () => {
                     element: (
                         <ProtectedRoute>
                             <Content />
+                        </ProtectedRoute>
+                    ),
+                },
+                {
+                    path: "/:username",
+                    element: (
+                        <ProtectedRoute>
+                            <UserInfo />
                         </ProtectedRoute>
                     ),
                 },

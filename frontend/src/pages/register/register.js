@@ -31,7 +31,7 @@ export default function Register() {
             console.log(response);
             setCredential({ username: "", password: "", email: "" });
             if (response.data === "User create") {
-                return navigate("/content"); //use JWT when done
+                return navigate("/content"); //pass username
             }
         } catch (e) {
             console.log(e);
