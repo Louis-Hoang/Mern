@@ -1,6 +1,11 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    Outlet,
+    Navigate,
+} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css"; //use .min for production
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import "./assets/index.css";

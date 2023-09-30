@@ -5,6 +5,7 @@ import { LoginAPI } from "../../apis/UserAPI";
 
 export default function Login({ change }) {
     const navigate = useNavigate();
+
     const [credential, setCredential] = useState({
         username: "",
         password: "",
