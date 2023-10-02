@@ -101,7 +101,11 @@ app.post("/login", (req, res, next) => {
             else {
                 req.login(user, (err) => {
                     if (err) throw err;
-                    res.json({ auth: req.isAuthenticated() });
+                    res.json({
+                        auth: req.isAuthenticated(),
+                        username: req.user.username,
+                        id: req.user._id,
+                    });
                     console.log(req.user);
                     console.log("login sucess");
                 });
@@ -118,6 +122,7 @@ app.post("/auth", function (req, res, next) {
             return res.json({
                 auth: true,
                 user: req.user.username,
+                id: req.user._id,
             });
         }
         return res.json({ auth: false, message: "cannot authenticate" });
@@ -134,6 +139,20 @@ app.post("/logout", (req, res, next) => {
     });
     res.send("Logout success");
 });
+
+app.get("/user/:userId", async (req, res, next) => {
+    const { userId } = req.params;
+    // userId = "";
+    // if (req.user) {
+    //     return res.json({ msg: "Found up", user: user });
+    // }
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.json({ msg: "User does not exist" });
+    }
+    console.log(user);
+    return res.json({ msg: "User found", user: user });
+}); //use id
 
 // Handles any requests that don't match the ones above
 app.get("*", (req, res) => {

@@ -10,14 +10,12 @@ const ProtectedRoute = (props) => {
             const res = await isLoggedIn();
             if (!res.status) {
                 console.log("Not logged in");
-                navigate("/login", { replace: true });
+                return navigate("/login", { replace: true });
             }
         }
-
         status(); // Call the status function
     }, [navigate]);
 
-    console.log("Rendering ProtectedRoute");
     return <React.Fragment>{props.children}</React.Fragment>;
 };
 

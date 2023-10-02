@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom/client";
+// import * as ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css"; //use .min for production
 import "bootstrap/dist/js/bootstrap.bundle.js";
@@ -14,22 +14,40 @@ import UserInfo from "./pages/UserInfo/UserInfo";
 import ProtectedRoute from "./utils/ProtectedRoutes/ProtectedRoutes";
 
 import { useState } from "react";
-import { isLoggedIn } from "./apis/UserAPI";
+import { isLoggedIn, fetchUserData } from "./apis/UserAPI";
 
 const App = () => {
     const [userState, setUserState] = useState(async () => {
         const res = await isLoggedIn();
-        return setUserState({ username: res.username, login: res.status });
+        return setUserState({
+            login: res.status,
+            username: res.username,
+            id: res.id,
+        });
     });
 
-    const handleState = (bool, credential) => {
-        const newState = { ...userState, login: bool, username: credential };
+    const handleLoginState = (bool, username, id) => {
+        const newState = {
+            ...userState,
+            login: bool,
+            username: username,
+            id: id,
+        };
         setUserState(newState);
     };
+
+    const fetchUser = async () => {
+        if (userState.id) {
+            const res = await fetchUserData(userState.id);
+            return res;
+        }
+        return null;
+    };
+
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <Navbar status={userState} change={handleState} />,
+            element: <Navbar status={userState} change={handleLoginState} />,
             children: [
                 {
                     path: "/", // yes, again
@@ -42,7 +60,7 @@ const App = () => {
                 },
                 {
                     path: "/login",
-                    element: <Login change={handleState} />,
+                    element: <Login change={handleLoginState} />,
                 },
                 {
                     path: "/content",
@@ -56,9 +74,10 @@ const App = () => {
                     path: "/:username",
                     element: (
                         <ProtectedRoute>
-                            <UserInfo />
+                            <UserInfo user={userState} />
                         </ProtectedRoute>
                     ),
+                    loader: fetchUser,
                 },
             ],
         },
