@@ -64,11 +64,12 @@ async function isLoggedIn() {
 async function fetchUserData(id) {
     const response = await Axios.get(`/user/${id}`);
     if (response) {
-        console.log(response.data);
+        const { username, _id, avatar } = response.data.user;
         return {
             status: true,
-            username: response.data.user.username,
-            id: response.data.user._id,
+            username: username,
+            id: _id,
+            avatar: avatar,
         };
     }
 }
