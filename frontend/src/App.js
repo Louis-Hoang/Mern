@@ -56,7 +56,7 @@ const App = () => {
                 },
                 {
                     path: "/register",
-                    element: <Register />,
+                    element: <Register change={handleLoginState} />,
                 },
                 {
                     path: "/login",

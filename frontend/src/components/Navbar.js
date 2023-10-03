@@ -9,7 +9,7 @@ export default function Navigation({ status, change }) {
     const navigate = useNavigate();
     const handleLogout = async () => {
         await LogoutAPI();
-        change(false);
+        change(false, "", null);
         return navigate("/");
     };
     return (

@@ -3,7 +3,7 @@ import React, { useState, useRef } from "react";
 import Axios from "axios";
 import { RegisterAPI } from "../../apis/UserAPI";
 
-export default function Register() {
+export default function Register({ change }) {
     const navigate = useNavigate();
     const [credential, setCredential] = useState({
         username: "",
@@ -36,12 +36,12 @@ export default function Register() {
         }
         try {
             const response = await RegisterAPI(formData);
-            console.log(response);
             setCredential({ username: "", password: "", email: "", image: "" });
             if (fileInputRef.current) {
                 fileInputRef.current.value = "";
-            }
+            } //reser input field
             if (response.status) {
+                change(true, credential.username, response.id);
                 return navigate("/content"); //pass username
             }
         } catch (e) {

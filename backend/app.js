@@ -92,7 +92,11 @@ app.post("/register", uploadImage.single("image"), async (req, res, next) => {
 
         req.login(registeredUser, (err) => {
             if (err) return next(err);
-            res.send({ auth: true });
+            res.send({
+                auth: true,
+                username: req.user.username,
+                id: req.user._id,
+            });
         });
     } catch (e) {
         res.send(e);
@@ -151,10 +155,6 @@ app.post("/logout", (req, res, next) => {
 
 app.get("/user/:userId", async (req, res, next) => {
     const { userId } = req.params;
-    // userId = "";
-    // if (req.user) {
-    //     return res.json({ msg: "Found up", user: user });
-    // }
     const user = await User.findById(userId);
     if (!user) {
         return res.json({ msg: "User does not exist" });

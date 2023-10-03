@@ -3,7 +3,11 @@ import Axios from "axios";
 async function RegisterAPI(formData) {
     const response = await Axios.post("/register", formData);
     if (response.data.auth) {
-        return { status: true, msg: "Register Successfully" };
+        return {
+            status: true,
+            msg: "Register Successfully",
+            id: response.data.id,
+        };
     }
     console.log(response);
     return response;
