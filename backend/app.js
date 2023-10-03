@@ -159,8 +159,8 @@ app.get("/user/:userId", async (req, res, next) => {
     if (!user) {
         return res.json({ msg: "User does not exist" });
     }
-    console.log(user);
-    return res.json({ msg: "User found", user: user });
+    const foundUser = Object.assign({ thumbnail: user.thumbnail }, user._doc);
+    return res.json({ msg: "User found", user: foundUser });
 });
 
 // Handles any requests that don't match the ones above
