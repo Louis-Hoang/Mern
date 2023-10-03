@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Axios from "axios";
+import { RegisterAPI } from "../../apis/UserAPI";
 
 export default function Register() {
     const navigate = useNavigate();
@@ -8,29 +9,39 @@ export default function Register() {
         username: "",
         password: "",
         email: "",
+        image: "",
     });
-
-    const handleChange = (evt) => {
+    const fileInputRef = useRef(null);
+    const handleChange = (e) => {
         setCredential((currData) => {
+            if (e.target.name === "image") {
+                return {
+                    ...currData,
+                    image: e.target.files[0],
+                };
+            }
             return {
                 ...currData,
-                [evt.target.name]: evt.target.value,
+                [e.target.name]: e.target.value,
             };
         });
     };
+
     const handleRegistration = async (e) => {
         //REVISE THIS LATER
         e.preventDefault();
-        const { username, password, email } = credential;
+        const formData = new FormData();
+        for (const [key, value] of Object.entries(credential)) {
+            formData.append(`${key}`, value);
+        }
         try {
-            const response = await Axios.post("/register", {
-                username: username,
-                password: password,
-                email: email,
-            });
+            const response = await RegisterAPI(formData);
             console.log(response);
-            setCredential({ username: "", password: "", email: "" });
-            if (response.data === "User create") {
+            setCredential({ username: "", password: "", email: "", image: "" });
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+            if (response.status) {
                 return navigate("/content"); //pass username
             }
         } catch (e) {
@@ -40,8 +51,14 @@ export default function Register() {
     return (
         <div>
             <h1>Register Form</h1>
-            <form onSubmit={handleRegistration}>
-                <label htmlFor="Username">Username</label>
+            <form
+                className="validated-form"
+                onSubmit={handleRegistration}
+                encType="multipart/form-data"
+            >
+                <label className="form-label" htmlFor="Username">
+                    Username
+                </label>
                 <input
                     type="text"
                     placeholder="username"
@@ -50,7 +67,9 @@ export default function Register() {
                     onChange={handleChange}
                     value={credential.username}
                 />
-                <label htmlFor="Password">Password</label>
+                <label className="form-label" htmlFor="Password">
+                    Password
+                </label>
                 <input
                     type="password"
                     placeholder="password"
@@ -59,7 +78,9 @@ export default function Register() {
                     onChange={handleChange}
                     value={credential.password}
                 />
-                <label htmlFor="Email">Email</label>
+                <label className="form-label" htmlFor="Email">
+                    Email
+                </label>
                 <input
                     type="email"
                     placeholder="email"
@@ -68,7 +89,20 @@ export default function Register() {
                     onChange={handleChange}
                     value={credential.email}
                 />
-                <button>Add Item</button>
+                <div className="mb-3">
+                    <div className="form-file custom-file">
+                        <input
+                            type="file"
+                            className="form-file-input"
+                            id="image"
+                            name="image"
+                            required
+                            ref={fileInputRef}
+                            onChange={handleChange}
+                        />
+                    </div>
+                </div>
+                <button>Register</button>
             </form>
         </div>
     );

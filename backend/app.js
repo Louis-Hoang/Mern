@@ -8,6 +8,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const { uploadImage } = require("./aws-s3/index");
 const app = express();
 
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/mernStack";
@@ -59,7 +60,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Serve the static files from the React app
 // app.use(express.static(path.join(__dirname, "frontend/build")));
 
 app.use((req, res, next) => {
@@ -76,14 +76,23 @@ app.get("/api/getList", (req, res) => {
     console.log("Sent list of items");
 });
 
-app.post("/register", async (req, res, next) => {
+app.post("/register", uploadImage.single("image"), async (req, res, next) => {
     try {
         const { email, username, password } = req.body;
-        const user = new User({ email, username });
+        const avatar = { url: req.file.location, filename: req.file.key };
+        const user = new User({ email, username, avatar });
+
+        // user.avatar = {
+        //     //req.files for multiple file
+        //     url: req.file.location,
+        //     filename: req.file.key,
+        // };
+
         const registeredUser = await User.register(user, password);
+
         req.login(registeredUser, (err) => {
             if (err) return next(err);
-            res.send("User create");
+            res.send({ auth: true });
         });
     } catch (e) {
         res.send(e);
@@ -137,7 +146,7 @@ app.post("/logout", (req, res, next) => {
             return next(err);
         }
     });
-    res.send("Logout success");
+    res.json({ auth: true, msg: "Logout success" });
 });
 
 app.get("/user/:userId", async (req, res, next) => {
@@ -152,7 +161,7 @@ app.get("/user/:userId", async (req, res, next) => {
     }
     console.log(user);
     return res.json({ msg: "User found", user: user });
-}); //use id
+});
 
 // Handles any requests that don't match the ones above
 app.get("*", (req, res) => {
