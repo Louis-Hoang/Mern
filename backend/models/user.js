@@ -14,11 +14,17 @@ const userSchema = new Schema({
     },
 });
 
+userSchema.virtual("thumbnailSize").set(function (params) {
+    this._thumbnailSize = params;
+});
+
 userSchema.virtual("thumbnail").get(function () {
+    const width = this._thumbnailSize.width || 200;
+    const height = this._thumbnailSize.height || 150;
     const url =
         process.env.ImageKit_Endpoint +
         this.avatar.filename +
-        "?tr=w-200,h-150,f-png,lo-true";
+        `?tr=w-${width},h-${height},f-png,lo-true`;
     return url;
 });
 userSchema.plugin(passportLocalMongoose);

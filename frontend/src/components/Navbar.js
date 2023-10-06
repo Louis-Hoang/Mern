@@ -1,12 +1,14 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-// import { useState } from "react";
 import { LogoutAPI } from "../apis/UserAPI";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLoaderData } from "react-router-dom";
+
+import "../assets/Navbar.css";
 
 export default function Navigation({ status, change }) {
     const navigate = useNavigate();
+    const info = useLoaderData();
     const handleLogout = async () => {
         await LogoutAPI();
         change(false, "", null);
@@ -45,7 +47,20 @@ export default function Navigation({ status, change }) {
                                 </>
                             ) : (
                                 <>
-                                    <Nav.Link>{status.username}</Nav.Link>
+                                    {info && (
+                                        <Nav.Link
+                                            onClick={() =>
+                                                navigate(`/${info.username}`)
+                                            }
+                                        >
+                                            <img
+                                                className="avatar-icon"
+                                                src={info.thumbnail}
+                                                alt=""
+                                            />
+                                        </Nav.Link>
+                                    )}
+
                                     <Nav.Link onClick={handleLogout}>
                                         Logout
                                     </Nav.Link>

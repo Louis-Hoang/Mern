@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router-dom";
+import "../../assets/UserInfo.css";
 
 export default function UserInfo() {
     const info = useLoaderData();
@@ -12,7 +13,7 @@ export default function UserInfo() {
                     <h1>Welcome {username || ""}</h1>
                     <h1>Your id is {id || ""}</h1>
                 </div>
-                <img src={thumbnail} alt="" />
+                <img className="image" src={thumbnail} alt="" />
             </>
         );
     }

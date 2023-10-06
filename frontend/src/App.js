@@ -36,9 +36,9 @@ const App = () => {
         setUserState(newState);
     };
 
-    const fetchUser = async () => {
+    const fetchUser = async (thumbSize) => {
         if (userState.id) {
-            const res = await fetchUserData(userState.id);
+            const res = await fetchUserData(userState.id, thumbSize);
             return res;
         }
         return null;
@@ -48,6 +48,7 @@ const App = () => {
         {
             path: "/",
             element: <Navbar status={userState} change={handleLoginState} />,
+            loader: () => fetchUser(50),
             children: [
                 {
                     path: "/", // yes, again
@@ -77,7 +78,7 @@ const App = () => {
                             <UserInfo user={userState} />
                         </ProtectedRoute>
                     ),
-                    loader: fetchUser,
+                    loader: () => fetchUser(200),
                 },
             ],
         },

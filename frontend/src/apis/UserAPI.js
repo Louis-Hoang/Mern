@@ -60,8 +60,8 @@ async function isLoggedIn() {
     return { status: response.data.auth, username: "" };
 }
 
-async function fetchUserData(id) {
-    const response = await Axios.get(`/user/${id}`);
+async function fetchUserData(id, thumbnailDim) {
+    const response = await Axios.get(`/user/${id}/${thumbnailDim}`);
     if (response) {
         const { username, _id, avatar, thumbnail } = response.data.user;
         console.log(response.data.user);

@@ -153,12 +153,13 @@ app.post("/logout", (req, res, next) => {
     res.json({ auth: true, msg: "Logout success" });
 });
 
-app.get("/user/:userId", async (req, res, next) => {
-    const { userId } = req.params;
+app.get("/user/:userId/:thumbnailDim", async (req, res, next) => {
+    const { userId, thumbnailDim } = req.params;
     const user = await User.findById(userId);
     if (!user) {
         return res.json({ msg: "User does not exist" });
     }
+    user.thumbnailSize = { width: thumbnailDim, height: thumbnailDim };
     const foundUser = Object.assign({ thumbnail: user.thumbnail }, user._doc);
     return res.json({ msg: "User found", user: foundUser });
 });

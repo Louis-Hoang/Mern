@@ -76,6 +76,7 @@ export default function Register({ change }) {
                     id="password"
                     onChange={handleChange}
                     value={credential.password}
+                    autoComplete="off"
                 />
                 <label className="form-label" htmlFor="Email">
                     Email
