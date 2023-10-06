@@ -34,6 +34,7 @@ export default function Register({ change }) {
             formData.append(`${key}`, value);
         }
         try {
+            console.log(credential.image);
             const response = await RegisterAPI(formData);
             setCredential({ username: "", password: "", email: "", image: "" });
             if (fileInputRef.current) {

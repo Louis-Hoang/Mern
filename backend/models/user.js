@@ -9,8 +9,8 @@ if (process.env.NODE_ENV !== "production") {
 const userSchema = new Schema({
     email: { type: String, require: true, unique: true },
     avatar: {
-        url: String,
-        filename: String,
+        url: { type: String, required: true },
+        filename: { type: String, required: true },
     },
 });
 

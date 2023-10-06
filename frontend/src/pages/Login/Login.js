@@ -25,7 +25,8 @@ export default function Login({ change }) {
         const response = await LoginAPI(credential);
         if (response.status) {
             change(true, response.username, response.id);
-            return navigate(`/${response.username}`, { replace: true }); //pass username as param
+            // return navigate(`/${response.username}`, { replace: true });
+            return navigate(`/content`, { replace: true });
         }
 
         return navigate("/login");
