@@ -80,13 +80,11 @@ app.post("/register", uploadImage.single("image"), async (req, res, next) => {
     try {
         const { email, username, password } = req.body;
         const avatar = req.file
-            ? {
+            ? { url: req.file.location, filename: req.file.key }
+            : {
+                  //default image
                   url: process.env.AWS_DEFAULT_URL,
                   filename: process.env.AWS_DEFAULT_FILENAME,
-              }
-            : {
-                  url: "https://s3.us-east-2.amazonaws.com/mern.useravatar/_image_default_avatar.png",
-                  filename: "_image_default_avatar.png",
               };
         const user = new User({ email, username, avatar });
 
