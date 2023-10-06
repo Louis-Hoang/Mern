@@ -97,7 +97,6 @@ export default function Register({ change }) {
                             className="form-file-input"
                             id="image"
                             name="image"
-                            required
                             ref={fileInputRef}
                             onChange={handleChange}
                         />
