@@ -1,7 +1,7 @@
-export default function Content() {
+export const Content = () => {
     return (
         <div>
             <h1>Welcome new User</h1>
         </div>
     );
-}
+};

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 import { LoginAPI } from "../../apis/UserAPI";
 
-export default function Login({ change }) {
+export const Login = ({ change }) => {
     const navigate = useNavigate();
 
     const [credential, setCredential] = useState({
@@ -61,4 +61,4 @@ export default function Login({ change }) {
             </form>
         </div>
     );
-}
+};

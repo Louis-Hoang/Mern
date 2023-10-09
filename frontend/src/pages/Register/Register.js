@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState, useRef } from "react";
 import { RegisterAPI } from "../../apis/UserAPI";
 
-export default function Register({ change }) {
+export const Register = ({ change }) => {
     const navigate = useNavigate();
     const [credential, setCredential] = useState({
         username: "",
@@ -106,4 +106,4 @@ export default function Register({ change }) {
             </form>
         </div>
     );
-}
+};

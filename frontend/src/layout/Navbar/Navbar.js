@@ -1,10 +1,10 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { LogoutAPI } from "../apis/UserAPI";
+import { LogoutAPI } from "../../apis/UserAPI";
 import { Outlet, useNavigate, useLoaderData } from "react-router-dom";
 
-import "../assets/Navbar.css";
+import "../../assets/Navbar.css";
 
 export default function Navigation({ status, change }) {
     const navigate = useNavigate();

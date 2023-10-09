@@ -4,14 +4,27 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; //use .min for production
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import "./assets/index.css";
-import Navbar from "./components/Navbar";
-import Root from "./pages/Root/Root";
-import ErrorPage from "./pages/ErrorHandler/error-page";
-import Register from "./pages/Register/Register";
-import Login from "./pages/Login/Login";
-import Content from "./pages/Content/Content";
-import UserInfo from "./pages/UserInfo/UserInfo";
-import ProtectedRoute from "./utils/ProtectedRoutes/ProtectedRoutes";
+import Navbar from "./layout/Navbar";
+
+// import Root from "./pages/Root";
+
+// import {
+//     Root,
+//     ErrorHandler,
+//     Register,
+//     Login,
+//     Content,
+//     UserInfo,
+// } from "./pages";
+
+import * as page from "./pages";
+// import ErrorHandler from "./pages/ErrorHandler";
+// import Register from "./pages/Register";
+// import Login from "./pages/Login";
+// import Content from "./pages/Content";
+// import UserInfo from "./pages/UserInfo";
+
+import ProtectedRoute from "./utils/ProtectedRoutes";
 
 import { useState } from "react";
 import { isLoggedIn, fetchUserData } from "./apis/UserAPI";
@@ -52,22 +65,22 @@ const App = () => {
             children: [
                 {
                     path: "/", // yes, again
-                    element: <Root />,
-                    errorElement: <ErrorPage />,
+                    element: <page.Root />,
+                    errorElement: <page.ErrorHandler />,
                 },
                 {
                     path: "/register",
-                    element: <Register change={handleLoginState} />,
+                    element: <page.Register change={handleLoginState} />,
                 },
                 {
                     path: "/login",
-                    element: <Login change={handleLoginState} />,
+                    element: <page.Login change={handleLoginState} />,
                 },
                 {
                     path: "/content",
                     element: (
                         <ProtectedRoute>
-                            <Content />
+                            <page.Content />
                         </ProtectedRoute>
                     ),
                 },
@@ -75,7 +88,7 @@ const App = () => {
                     path: "/:username",
                     element: (
                         <ProtectedRoute>
-                            <UserInfo user={userState} />
+                            <page.UserInfo user={userState} />
                         </ProtectedRoute>
                     ),
                     loader: () => fetchUser(200),

@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import "../../assets/UserInfo.css";
 
-export default function UserInfo() {
+export const UserInfo = () => {
     const info = useLoaderData();
 
     if (info) {
@@ -17,4 +17,4 @@ export default function UserInfo() {
             </>
         );
     }
-}
+};
