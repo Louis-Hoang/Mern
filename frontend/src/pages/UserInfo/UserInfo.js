@@ -6,7 +6,6 @@ export const UserInfo = () => {
 
     if (info) {
         const { username, id, thumbnail } = info;
-        console.log(info);
         return (
             <>
                 <div>

@@ -1,12 +1,12 @@
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
+import { default as Navigation } from "react-bootstrap/Navbar";
 import { LogoutAPI } from "../../apis/UserAPI";
 import { Outlet, useNavigate, useLoaderData } from "react-router-dom";
 
 import "../../assets/Navbar.css";
 
-export default function Navigation({ status, change }) {
+export const Navbar = ({ status, change }) => {
     const navigate = useNavigate();
     const info = useLoaderData();
     const handleLogout = async () => {
@@ -14,34 +14,35 @@ export default function Navigation({ status, change }) {
         change(false, "", null);
         return navigate("/");
     };
+    const handleNav = (dir) => {
+        return () => navigate(`/${dir}`);
+    };
     return (
         <>
-            <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+            <Navigation
+                collapseOnSelect
+                expand="lg"
+                className="bg-body-tertiary"
+            >
                 <Container>
-                    <Navbar.Brand
+                    <Navigation.Brand
                         className="link_cursor"
-                        onClick={() => navigate("/")}
+                        onClick={handleNav("")}
                     >
                         MERN
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                    <Navbar.Collapse id="responsive-navbar-nav">
+                    </Navigation.Brand>
+                    <Navigation.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navigation.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link onClick={() => navigate("/")}>
-                                Home
-                            </Nav.Link>
+                            <Nav.Link onClick={handleNav("")}>Home</Nav.Link>
                         </Nav>
                         <Nav>
                             {!status.login ? (
                                 <>
-                                    <Nav.Link
-                                        onClick={() => navigate("/login")}
-                                    >
+                                    <Nav.Link onClick={handleNav("login")}>
                                         Login
                                     </Nav.Link>
-                                    <Nav.Link
-                                        onClick={() => navigate("/register")}
-                                    >
+                                    <Nav.Link onClick={handleNav("register")}>
                                         Register
                                     </Nav.Link>
                                 </>
@@ -49,9 +50,9 @@ export default function Navigation({ status, change }) {
                                 <>
                                     {info && (
                                         <Nav.Link
-                                            onClick={() =>
-                                                navigate(`/${info.username}`)
-                                            }
+                                            onClick={handleNav(
+                                                `${info.username}`
+                                            )}
                                         >
                                             <img
                                                 className="avatar-icon"
@@ -67,12 +68,12 @@ export default function Navigation({ status, change }) {
                                 </>
                             )}
                         </Nav>
-                    </Navbar.Collapse>
+                    </Navigation.Collapse>
                 </Container>
-            </Navbar>
+            </Navigation>
             <>
                 <Outlet />
             </>
         </>
     );
-}
+};

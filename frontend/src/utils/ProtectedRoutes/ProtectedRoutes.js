@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { isLoggedIn } from "../../apis/UserAPI";
 
-const ProtectedRoute = (props) => {
+export const ProtectedRoutes = (props) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,5 +18,3 @@ const ProtectedRoute = (props) => {
 
     return <React.Fragment>{props.children}</React.Fragment>;
 };
-
-export default ProtectedRoute;
