@@ -61,7 +61,7 @@ async function isLoggedIn() {
 }
 
 async function fetchUserData(id, thumbnailDim) {
-    const response = await Axios.get(`/user/${id}/${thumbnailDim}`);
+    const response = await Axios.get(`/${id}/${thumbnailDim}`);
     if (response) {
         const { username, _id, avatar, thumbnail } = response.data.user;
         console.log(response.data.user);
