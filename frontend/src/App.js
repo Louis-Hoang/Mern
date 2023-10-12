@@ -1,6 +1,11 @@
 import * as React from "react";
 // import * as ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import {
+    createBrowserRouter,
+    RouterProvider,
+    Outlet,
+    Navigate,
+} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; //use .min for production
 import "bootstrap/dist/js/bootstrap.bundle.js";
 import "./assets/index.css";
@@ -42,6 +47,7 @@ const App = () => {
     // };
 
     const fetchUser = (thumbSize) => {
+        //currying function
         return async () => {
             if (userState.id) {
                 const res = await fetchUserData(userState.id, thumbSize);
@@ -54,7 +60,6 @@ const App = () => {
         {
             path: "/",
             element: <Navbar status={userState} change={handleLoginState} />,
-            // loader: () => fetchUser(50),
             loader: fetchUser(50),
             children: [
                 {
@@ -64,11 +69,19 @@ const App = () => {
                 },
                 {
                     path: "/register",
-                    element: <page.Register change={handleLoginState} />,
+                    element: !userState.login ? (
+                        <page.Register change={handleLoginState} />
+                    ) : (
+                        <Navigate to="/content" replace={true} />
+                    ),
                 },
                 {
                     path: "/login",
-                    element: <page.Login change={handleLoginState} />,
+                    element: !userState.login ? (
+                        <page.Login change={handleLoginState} />
+                    ) : (
+                        <Navigate to="/content" replace={true} />
+                    ),
                 },
                 {
                     path: "/content",
@@ -85,7 +98,6 @@ const App = () => {
                             <page.UserInfo user={userState} />
                         </ProtectedRoutes>
                     ),
-                    // loader: () => fetchUser(200),
                     loader: fetchUser(200),
                 },
             ],
