@@ -38,14 +38,6 @@ const App = () => {
         setUserState(newState);
     };
 
-    // const fetchUser = async (thumbSize) => {
-    //     if (userState.id) {
-    //         const res = await fetchUserData(userState.id, thumbSize);
-    //         return res;
-    //     }
-    //     return null;
-    // };
-
     const fetchUser = (thumbSize) => {
         //currying function
         return async () => {
