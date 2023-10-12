@@ -8,9 +8,14 @@ async function RegisterAPI(formData) {
             msg: "Register Successfully",
             id: response.data.id,
         };
+    } else {
+        console.log(response.data.err.message);
+        return {
+            status: false,
+        };
     }
-    console.log(response);
-    return response;
+    // console.log(response);
+    // return response;
 }
 
 async function LogoutAPI() {

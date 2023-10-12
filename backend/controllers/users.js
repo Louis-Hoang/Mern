@@ -28,16 +28,26 @@ module.exports.registerUser = async (req, res, next) => {
         //     filename: req.file.key,
         // };
 
-        const registeredUser = await User.register(user, password);
-
-        req.login(registeredUser, (err) => {
-            if (err) return next(err);
-            res.send({
-                auth: true,
-                username: req.user.username,
-                id: req.user._id,
+        const registeredUser = await User.register(
+            user,
+            password,
+            function (err, user) {
+                if (err) {
+                    res.send({ err });
+                }
+            }
+        );
+        if (registeredUser) {
+            req.login(registeredUser, (err) => {
+                if (err) return next(err);
+                res.send({
+                    auth: true,
+                    username: req.user.username,
+                    id: req.user._id,
+                    msg: "Register successfully",
+                });
             });
-        });
+        }
     } catch (e) {
         res.send(e);
     }
