@@ -21,33 +21,30 @@ module.exports.registerUser = async (req, res, next) => {
                   filename: process.env.AWS_DEFAULT_FILENAME,
               };
         const user = new User({ email, username, avatar });
-
         // user.avatar = {
         //     //req.files for multiple file
         //     url: req.file.location,
         //     filename: req.file.key,
         // };
 
-        const registeredUser = await User.register(
-            user,
-            password,
-            function (err, user) {
-                if (err) {
-                    res.send({ err });
-                }
-            }
-        );
-        if (registeredUser) {
-            req.login(registeredUser, (err) => {
-                if (err) return next(err);
-                res.send({
-                    auth: true,
-                    username: req.user.username,
-                    id: req.user._id,
-                    msg: "Register successfully",
+        await User.register(user, password, function (err, registeredUser) {
+            if (err) {
+                return res.send({ err });
+            } else {
+                // Registration successful, proceed with login
+                req.login(registeredUser, (err) => {
+                    if (err) {
+                        return res.send({ err });
+                    }
+                    return res.send({
+                        auth: true,
+                        username: req.user.username,
+                        id: req.user._id,
+                        msg: "Register successfully",
+                    });
                 });
-            });
-        }
+            }
+        });
     } catch (e) {
         res.send(e);
     }

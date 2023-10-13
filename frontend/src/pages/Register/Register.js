@@ -32,6 +32,7 @@ export const Register = ({ change }) => {
 
     const handleRegistration = async (e) => {
         const form = e.currentTarget;
+        setValidated(true);
         if (form.checkValidity() === false) {
             e.preventDefault();
             e.stopPropagation();
@@ -42,7 +43,6 @@ export const Register = ({ change }) => {
                 formData.append(`${key}`, value);
             }
             try {
-                console.log(credential.image);
                 const response = await RegisterAPI(formData);
                 setCredential({
                     username: "",
@@ -61,7 +61,6 @@ export const Register = ({ change }) => {
                 console.log(e);
             }
         }
-        setValidated(true);
     };
     return (
         <StyleWrapper>
