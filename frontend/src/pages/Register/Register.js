@@ -65,59 +65,6 @@ export const Register = ({ change }) => {
     return (
         <StyleWrapper>
             <h1>Register Form</h1>
-            {/* <form
-                className="validated-form"
-                onSubmit={handleRegistration}
-                encType="multipart/form-data"
-            >
-                <label className="form-label" htmlFor="Username">
-                    Username
-                </label>
-                <input
-                    type="text"
-                    placeholder="username"
-                    name="username"
-                    id="username"
-                    onChange={handleChange}
-                    value={credential.username}
-                />
-                <label className="form-label" htmlFor="Password">
-                    Password
-                </label>
-                <input
-                    type="password"
-                    placeholder="password"
-                    name="password"
-                    id="password"
-                    onChange={handleChange}
-                    value={credential.password}
-                    autoComplete="off"
-                />
-                <label className="form-label" htmlFor="Email">
-                    Email
-                </label>
-                <input
-                    type="email"
-                    placeholder="email"
-                    name="email"
-                    id="email"
-                    onChange={handleChange}
-                    value={credential.email}
-                />
-                <div className="mb-3">
-                    <div className="form-file custom-file">
-                        <input
-                            type="file"
-                            className="form-file-input"
-                            id="image"
-                            name="image"
-                            ref={fileInputRef}
-                            onChange={handleChange}
-                        />
-                    </div>
-                </div>
-                <button>Register</button>
-            </form> */}
             <Form
                 noValidate
                 validated={validated}

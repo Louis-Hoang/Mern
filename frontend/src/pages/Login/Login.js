@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-
+import { StyleWrapper } from "../../utils";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import { LoginAPI } from "../../apis/UserAPI";
 
 export const Login = ({ change }) => {
     const navigate = useNavigate();
-
+    const [validated, setValidated] = useState(false);
     const [credential, setCredential] = useState({
         username: "",
         password: "",
@@ -22,6 +24,7 @@ export const Login = ({ change }) => {
     };
     const handleLogin = async (e) => {
         e.preventDefault();
+        setValidated(true);
         const response = await LoginAPI(credential);
         if (response.status) {
             change(true, response.username, response.id);
@@ -33,9 +36,9 @@ export const Login = ({ change }) => {
     };
 
     return (
-        <div>
+        <StyleWrapper>
             <h1>Login Form</h1>
-            <form onSubmit={handleLogin}>
+            {/* <form onSubmit={handleLogin}>
                 <label htmlFor="Username">Username</label>
                 <input
                     type="text"
@@ -58,7 +61,37 @@ export const Login = ({ change }) => {
                 />
 
                 <button>Login</button>
-            </form>
-        </div>
+            </form> */}
+
+            <Form noValidate validated={validated} onSubmit={handleLogin}>
+                <Form.Group className="mb-3" controlId="username">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
+                        required
+                        type="username"
+                        placeholder="Username"
+                        name="username"
+                        onChange={handleChange}
+                        value={credential.username}
+                    />
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="password">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                        required
+                        type="password"
+                        placeholder="Password"
+                        name="password"
+                        onChange={handleChange}
+                        value={credential.password}
+                        autoComplete="off"
+                    />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                    Login
+                </Button>
+            </Form>
+        </StyleWrapper>
     );
 };
