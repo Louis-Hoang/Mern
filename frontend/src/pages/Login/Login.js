@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { StyleWrapper } from "../../utils";
+import { StyleWrapper, AlertMessage } from "../../utils";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { LoginAPI } from "../../apis/UserAPI";
 
 export const Login = ({ change }) => {
     const navigate = useNavigate();
+    const [alert, setAlert] = useState(null);
     const [validated, setValidated] = useState(false);
     const [credential, setCredential] = useState({
         username: "",
@@ -26,43 +27,43 @@ export const Login = ({ change }) => {
         e.preventDefault();
         setValidated(true);
         const response = await LoginAPI(credential);
+        setCredential({
+            username: "",
+            password: "",
+        });
         if (response.status) {
             change(true, response.username, response.id);
             // return navigate(`/${response.username}`, { replace: true });
             return navigate(`/content`, { replace: true });
         }
-
+        setAlert({
+            ...alert,
+            type: "danger",
+            message: response.msg,
+            show: true,
+        });
         return navigate("/login");
+    };
+    const closeAlert = () => {
+        setAlert({
+            ...alert,
+            type: null,
+            message: null,
+            show: false,
+        });
     };
 
     return (
         <StyleWrapper>
+            {alert && (
+                <AlertMessage
+                    type={alert.type}
+                    message={alert.message}
+                    show={alert.show}
+                    handleClose={closeAlert} // Add an onClose handler to clear the alert
+                />
+            )}
             <h1>Login Form</h1>
-            {/* <form onSubmit={handleLogin}>
-                <label htmlFor="Username">Username</label>
-                <input
-                    type="text"
-                    placeholder="username"
-                    name="username"
-                    id="username"
-                    onChange={handleChange}
-                    value={credential.username}
-                    autoComplete="off"
-                />
-                <label htmlFor="Password">Password</label>
-                <input
-                    type="password"
-                    placeholder="password"
-                    name="password"
-                    id="password"
-                    onChange={handleChange}
-                    value={credential.password}
-                    autoComplete="off"
-                />
-
-                <button>Login</button>
-            </form> */}
-
             <Form noValidate validated={validated} onSubmit={handleLogin}>
                 <Form.Group className="mb-3" controlId="username">
                     <Form.Label>Username</Form.Label>

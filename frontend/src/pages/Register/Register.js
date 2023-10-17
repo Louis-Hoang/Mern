@@ -8,7 +8,6 @@ import { StyleWrapper, AlertMessage } from "../../utils";
 export const Register = ({ change }) => {
     const [validated, setValidated] = useState(false);
     const [alert, setAlert] = useState(null);
-
     const navigate = useNavigate();
     const [credential, setCredential] = useState({
         username: "",

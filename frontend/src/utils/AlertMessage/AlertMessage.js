@@ -12,6 +12,7 @@ export const AlertMessage = ({ type, message, handleClose, show }) => {
             variant={type}
             onClose={handleAlertClose}
             show={show}
+            transition={false}
             dismissible
         >
             <div>{message}</div>

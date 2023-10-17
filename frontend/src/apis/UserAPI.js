@@ -9,8 +9,6 @@ async function RegisterAPI(formData) {
             id: response.data.id,
         };
     } else {
-        // console.log(response.data.err.message);
-        // console.log(response.data);
         return {
             //revise to change to dynamic
             status: false,
@@ -20,8 +18,6 @@ async function RegisterAPI(formData) {
                     : response.data.err.message,
         };
     }
-    // console.log(response);
-    // return response;
 }
 
 async function LogoutAPI() {
@@ -49,8 +45,7 @@ async function LoginAPI(credential) {
                 id: response.data.id,
             };
         } else {
-            // console.log(response.data.msg);
-            return { status: false };
+            return { status: false, msg: response.data.msg };
         }
     } catch (e) {
         console.log("Error");
