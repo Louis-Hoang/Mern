@@ -9,9 +9,15 @@ async function RegisterAPI(formData) {
             id: response.data.id,
         };
     } else {
-        console.log(response.data.err.message);
+        // console.log(response.data.err.message);
+        // console.log(response.data);
         return {
+            //revise to change to dynamic
             status: false,
+            msg:
+                response.data.err.code === 11000
+                    ? "A user with the given email is already registered"
+                    : response.data.err.message,
         };
     }
     // console.log(response);

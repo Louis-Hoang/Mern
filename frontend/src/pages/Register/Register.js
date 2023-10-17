@@ -3,10 +3,12 @@ import React, { useState, useRef } from "react";
 import { RegisterAPI } from "../../apis/UserAPI";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { StyleWrapper } from "../../utils";
+import { StyleWrapper, AlertMessage } from "../../utils";
 
 export const Register = ({ change }) => {
     const [validated, setValidated] = useState(false);
+    const [alert, setAlert] = useState(null);
+
     const navigate = useNavigate();
     const [credential, setCredential] = useState({
         username: "",
@@ -56,14 +58,38 @@ export const Register = ({ change }) => {
                 if (response.status) {
                     change(true, credential.username, response.id);
                     return navigate("/content"); //pass username
+                } else {
+                    console.log(response.msg);
+                    setAlert({
+                        ...alert,
+                        type: "danger",
+                        message: response.msg,
+                        show: true,
+                    });
                 }
             } catch (e) {
                 console.log(e);
             }
         }
     };
+    const closeAlert = () => {
+        setAlert({
+            ...alert,
+            type: null,
+            message: null,
+            show: false,
+        });
+    };
     return (
         <StyleWrapper>
+            {alert && (
+                <AlertMessage
+                    type={alert.type}
+                    message={alert.message}
+                    show={alert.show}
+                    handleClose={closeAlert} // Add an onClose handler to clear the alert
+                />
+            )}
             <h1>Register Form</h1>
             <Form
                 noValidate
@@ -102,7 +128,7 @@ export const Register = ({ change }) => {
                     <Form.Label>Default file input example</Form.Label>
                     <Form.Control
                         type="file"
-                        className="form-file-input"
+                        className="form-file-input prevent-validation"
                         name="image"
                         ref={fileInputRef}
                         onChange={handleChange}
@@ -116,7 +142,6 @@ export const Register = ({ change }) => {
                         type="email"
                         placeholder="Enter email"
                         name="email"
-                        // id="email"
                         onChange={handleChange}
                         value={credential.email}
                     />

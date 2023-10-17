@@ -34,7 +34,7 @@ module.exports.registerUser = async (req, res, next) => {
                 // Registration successful, proceed with login
                 req.login(registeredUser, (err) => {
                     if (err) {
-                        return res.send({ err });
+                        return res.send(err);
                     }
                     return res.send({
                         auth: true,
