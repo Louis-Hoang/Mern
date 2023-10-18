@@ -4,14 +4,14 @@ async function RegisterAPI(formData) {
     const response = await Axios.post("/register", formData);
     if (response.data.auth) {
         return {
-            status: true,
+            auth: true,
             msg: "Register Successfully",
             id: response.data.id,
         };
     } else {
         return {
             //revise to change to dynamic
-            status: false,
+            auth: false,
             msg:
                 response.data.err.code === 11000
                     ? "A user with the given email is already registered"
@@ -40,12 +40,12 @@ async function LoginAPI(credential) {
 
         if (response.data.auth) {
             return {
-                status: true,
+                auth: true,
                 username: response.data.username,
                 id: response.data.id,
             };
         } else {
-            return { status: false, msg: response.data.msg };
+            return { auth: false, msg: response.data.msg };
         }
     } catch (e) {
         console.log("Error");
@@ -58,12 +58,12 @@ async function isLoggedIn() {
     const response = await Axios.post("/auth");
     if (response.data.auth) {
         return {
-            status: response.data.auth,
+            auth: response.data.auth,
             username: response.data.user,
             id: response.data.id,
         };
     }
-    return { status: response.data.auth, username: "" };
+    return { auth: response.data.auth, username: "", id: "" };
 }
 
 async function fetchUserData(id, thumbnailDim) {
@@ -72,7 +72,7 @@ async function fetchUserData(id, thumbnailDim) {
         const { username, _id, avatar, thumbnail } = response.data.user;
         // console.log(response.data.user);
         return {
-            status: true,
+            auth: true,
             username: username,
             id: _id,
             avatar: avatar,

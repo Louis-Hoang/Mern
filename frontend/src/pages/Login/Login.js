@@ -31,7 +31,7 @@ export const Login = ({ change }) => {
             username: "",
             password: "",
         });
-        if (response.status) {
+        if (response.auth) {
             change(true, response.username, response.id);
             // return navigate(`/${response.username}`, { replace: true });
             return navigate(`/content`, { replace: true });

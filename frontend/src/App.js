@@ -22,7 +22,7 @@ const App = () => {
     const [userState, setUserState] = useState(async () => {
         const res = await isLoggedIn();
         return setUserState({
-            login: res.status,
+            login: res.auth,
             username: res.username,
             id: res.id,
         });

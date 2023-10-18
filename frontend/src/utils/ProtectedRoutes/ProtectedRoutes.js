@@ -8,7 +8,7 @@ export const ProtectedRoutes = (props) => {
     useEffect(() => {
         async function status() {
             const res = await isLoggedIn();
-            if (!res.status) {
+            if (!res.auth) {
                 console.log("Not logged in");
                 return navigate("/login", { replace: true });
             }

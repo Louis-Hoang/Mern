@@ -54,7 +54,7 @@ export const Register = ({ change }) => {
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                 } //reser input field
-                if (response.status) {
+                if (response.auth) {
                     change(true, credential.username, response.id);
                     return navigate("/content"); //pass username
                 } else {
