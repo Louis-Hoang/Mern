@@ -7,7 +7,7 @@ import {
     Navigate,
 } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; //use .min for production
-import "bootstrap/dist/js/bootstrap.bundle.js";
+import "bootstrap/dist/js/bootstrap.bundle";
 import "./assets/index.css";
 
 import { Navbar } from "./layout/Navbar";

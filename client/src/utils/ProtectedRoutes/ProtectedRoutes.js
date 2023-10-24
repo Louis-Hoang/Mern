@@ -9,7 +9,6 @@ export const ProtectedRoutes = (props) => {
         async function status() {
             const res = await isLoggedIn();
             if (!res.auth) {
-                console.log("Not logged in");
                 return navigate("/login", { replace: true });
             }
         }

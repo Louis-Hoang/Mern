@@ -1,31 +1,65 @@
-const User = require("../models/user");
-const mongoose = require("mongoose");
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
+// const User = require("../models/user");
+// const mongoose = require("mongoose");
+// const passport = require("passport");
+// const LocalStrategy = require("passport-local");
+// const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/mernStack";
+// const session = require("express-session");
+// const MongoStore = require("connect-mongo");
+
+import { Request, Response, NextFunction } from "express";
+import { User, IUser } from "../models/user";
+import passport from "passport";
+// import { Strategy as LocalStrategy } from "passport-local";
+import passportLocal from "passport-local";
+import mongoose from "mongoose";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+
 const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/mernStack";
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
 
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
 
-module.exports.registerUser = async (req, res, next) => {
+interface ExtendedFile {
+    location: string;
+    key: string; // Make 'key' optional
+}
+
+interface AuthenticatedRequest extends Request {
+    isAuthenticated(): boolean;
+    login(user: IUser, done: (err: any) => void): void;
+    login(
+        user: IUser,
+        options: passport.AuthenticateOptions,
+        done: (err: any) => void
+    ): void;
+    logout(callback: (err: any) => void): void;
+    logout(options: passport.LogOutOptions, done: (err: any) => void): void;
+    user?: IUser;
+}
+
+export const registerUser = async (
+    req: AuthenticatedRequest,
+    res: Response
+) => {
+    // user.avatar = {
+    //     //req.files for multiple file
+    //     url: req.file.location,
+    //     filename: req.file.key,
+    // };
+
     try {
         const { email, username, password } = req.body;
-        const avatar = req.file
-            ? { url: req.file.location, filename: req.file.key }
+        const uploadedFile = req.file as unknown as ExtendedFile;
+        const avatar = uploadedFile
+            ? { url: uploadedFile.location, filename: uploadedFile.key }
             : {
                   //default image
                   url: process.env.AWS_DEFAULT_URL,
                   filename: process.env.AWS_DEFAULT_FILENAME,
               };
         const user = new User({ email, username, avatar });
-        // user.avatar = {
-        //     //req.files for multiple file
-        //     url: req.file.location,
-        //     filename: req.file.key,
-        // };
 
         await User.register(user, password, function (err, registeredUser) {
             if (err) {
@@ -50,8 +84,12 @@ module.exports.registerUser = async (req, res, next) => {
     }
 };
 
-module.exports.loginUser = (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
+export const loginUser = (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    passport.authenticate("local", (_err: Error, user: IUser) => {
         try {
             if (!user)
                 res.json({
@@ -70,13 +108,16 @@ module.exports.loginUser = (req, res, next) => {
                     console.log("login sucess");
                 });
             }
-        } catch (e) {
-            console.log(e);
+        } catch (err) {
+            console.log(err);
         }
     })(req, res, next);
 };
 
-module.exports.authenticateUser = async (req, res, next) => {
+export const authenticateUser = async (
+    req: AuthenticatedRequest,
+    res: Response
+) => {
     try {
         if (req.isAuthenticated()) {
             return res.json({
@@ -91,7 +132,11 @@ module.exports.authenticateUser = async (req, res, next) => {
     }
 };
 
-module.exports.logoutUser = (req, res, next) => {
+export const logoutUser = (
+    req: AuthenticatedRequest,
+    res: Response,
+    next: NextFunction
+) => {
     req.logout(function (err) {
         if (err) {
             return next(err);
@@ -100,13 +145,14 @@ module.exports.logoutUser = (req, res, next) => {
     res.json({ auth: true, msg: "Logout success" });
 };
 
-module.exports.fetchUser = async (req, res, next) => {
+export const fetchUser = async (req: Request, res: Response) => {
     const { userId, thumbnailDim } = req.params;
     const user = await User.findById(userId);
     if (!user) {
         return res.json({ msg: "User does not exist" });
     }
-    user.thumbnailSize = { width: thumbnailDim, height: thumbnailDim };
+    const dim = parseInt(thumbnailDim, 10); //convert thumbnailDim to int
+    user._thumbnailSize = { width: dim, height: dim };
     const foundUser = Object.assign({ thumbnail: user.thumbnail }, user._doc);
     return res.json({ msg: "User found", user: foundUser });
 };
