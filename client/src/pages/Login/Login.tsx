@@ -5,7 +5,11 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { LoginAPI } from "../../apis/UserAPI";
 
-export const Login = ({ change }) => {
+interface LoginProps {
+    change: (bool: boolean, username: string, id: string) => void;
+}
+
+export const Login = ({ change }: LoginProps) => {
     const navigate = useNavigate();
     const [alert, setAlert] = useState(null);
     const [validated, setValidated] = useState(false);
@@ -15,7 +19,7 @@ export const Login = ({ change }) => {
         email: "",
     });
 
-    const handleChange = (evt) => {
+    const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setCredential((currData) => {
             return {
                 ...currData,
@@ -23,13 +27,14 @@ export const Login = ({ change }) => {
             };
         });
     };
-    const handleLogin = async (e) => {
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setValidated(true);
         const response = await LoginAPI(credential);
         setCredential({
             username: "",
             password: "",
+            email: "",
         });
         if (response.auth) {
             change(true, response.username, response.id);

@@ -5,7 +5,11 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { StyleWrapper, AlertMessage } from "../../utils";
 
-export const Register = ({ change }) => {
+interface RegisterProps {
+    change: (bool: boolean, username: string, id: string) => void;
+}
+
+export const Register = ({ change }: RegisterProps) => {
     const [validated, setValidated] = useState(false);
     const [alert, setAlert] = useState(null);
     const navigate = useNavigate();
@@ -13,10 +17,10 @@ export const Register = ({ change }) => {
         username: "",
         password: "",
         email: "",
-        image: "",
+        image: null,
     });
     const fileInputRef = useRef(null);
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setCredential((currData) => {
             if (e.target.name === "image") {
                 return {
@@ -31,7 +35,7 @@ export const Register = ({ change }) => {
         });
     };
 
-    const handleRegistration = async (e) => {
+    const handleRegistration = async (e: React.FormEvent<HTMLFormElement>) => {
         const form = e.currentTarget;
         setValidated(true);
         if (form.checkValidity() === false) {
@@ -49,7 +53,7 @@ export const Register = ({ change }) => {
                     username: "",
                     password: "",
                     email: "",
-                    image: "",
+                    image: null,
                 });
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
@@ -58,7 +62,7 @@ export const Register = ({ change }) => {
                     change(true, credential.username, response.id);
                     return navigate("/content"); //pass username
                 } else {
-                    console.log(response.msg);
+                    // console.log(response.msg);
                     setAlert({
                         ...alert,
                         type: "danger",

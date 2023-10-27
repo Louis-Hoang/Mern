@@ -1,9 +1,8 @@
-import * as React from "react";
+import React, { useState } from "react";
 // import * as ReactDOM from "react-dom/client";
 import {
     createBrowserRouter,
     RouterProvider,
-    Outlet,
     Navigate,
 } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; //use .min for production
@@ -15,20 +14,36 @@ import { Navbar } from "./layout/Navbar";
 import * as page from "./pages";
 import { ProtectedRoutes } from "./utils";
 
-import { useState } from "react";
 import { isLoggedIn, fetchUserData } from "./apis/UserAPI";
 
+interface UserState {
+    login: boolean;
+    username: string | null;
+    id: string | null;
+}
+
 const App = () => {
-    const [userState, setUserState] = useState(async () => {
-        const res = await isLoggedIn();
-        return setUserState({
-            login: res.auth,
-            username: res.username,
-            id: res.id,
-        });
+    const [userState, setUserState] = useState<UserState>(() => {
+        const initializeUserState = async () => {
+            const res = await isLoggedIn();
+            setUserState({
+                login: res.auth,
+                username: res.username,
+                id: res.id,
+            });
+        };
+
+        initializeUserState();
+
+        // Return an initial value for userState
+        return {
+            login: false,
+            username: "",
+            id: "",
+        };
     });
 
-    const handleLoginState = (bool, username, id) => {
+    const handleLoginState = (bool: boolean, username: string, id: string) => {
         const newState = {
             ...userState,
             login: bool,
@@ -38,7 +53,7 @@ const App = () => {
         setUserState(newState);
     };
 
-    const fetchUser = (thumbSize) => {
+    const fetchUser = (thumbSize: number) => {
         //currying function
         return async () => {
             if (userState.id) {
@@ -87,7 +102,7 @@ const App = () => {
                     path: "/:username",
                     element: (
                         <ProtectedRoutes>
-                            <page.UserInfo user={userState} />
+                            <page.UserInfo />
                         </ProtectedRoutes>
                     ),
                     loader: fetchUser(200),
@@ -97,9 +112,10 @@ const App = () => {
     ]);
 
     return (
-        <RouterProvider router={router}>
-            <Outlet />
-        </RouterProvider>
+        <RouterProvider
+            router={router}
+            fallbackElement={<React.Fragment>Loading ...</React.Fragment>}
+        ></RouterProvider>
     );
 };
 

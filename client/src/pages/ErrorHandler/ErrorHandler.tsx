@@ -1,7 +1,13 @@
+import React from "react";
 import { useRouteError } from "react-router-dom";
 
-export const ErrorHandler = () => {
-    const error = useRouteError();
+interface ErrorObject {
+    statusText?: string;
+    message?: string;
+}
+
+export const ErrorHandler: React.FC = () => {
+    const error = useRouteError() as ErrorObject;
     console.error(error);
 
     return (

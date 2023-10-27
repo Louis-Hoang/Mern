@@ -1,8 +1,19 @@
+import React from "react";
 import { useLoaderData } from "react-router-dom";
 import "../../assets/UserInfo.css";
 
-export const UserInfo = () => {
-    const info = useLoaderData();
+interface UserInfoProps {}
+
+interface userInfo {
+    auth?: boolean;
+    username?: string;
+    id?: string;
+    avatar?: string;
+    thumbnail?: string;
+}
+
+export const UserInfo: React.FC<UserInfoProps> = () => {
+    const info: userInfo = useLoaderData();
 
     if (info) {
         const { username, id, thumbnail } = info;
@@ -16,4 +27,6 @@ export const UserInfo = () => {
             </>
         );
     }
+
+    return null; // Return null if info is not available
 };

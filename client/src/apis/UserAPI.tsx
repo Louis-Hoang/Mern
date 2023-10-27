@@ -1,6 +1,19 @@
 import Axios from "axios";
 
-async function RegisterAPI(formData) {
+interface LoginCredential {
+    username: string;
+    password: string;
+    email: string;
+}
+
+interface RegisterFormData {
+    username: string;
+    password: string;
+    email: string;
+    image: File | null;
+}
+
+async function RegisterAPI(formData: FormData | RegisterFormData) {
     const response = await Axios.post("/register", formData);
     if (response.data.auth) {
         return {
@@ -29,7 +42,7 @@ async function LogoutAPI() {
     return response;
 }
 
-async function LoginAPI(credential) {
+async function LoginAPI(credential: LoginCredential) {
     const { username, password, email } = credential;
     try {
         const response = await Axios.post("/login", {
@@ -44,13 +57,12 @@ async function LoginAPI(credential) {
                 username: response.data.username,
                 id: response.data.id,
             };
-        } else {
-            return { auth: false, msg: response.data.msg };
         }
+        return { auth: false, msg: response.data.msg };
     } catch (e) {
         console.log("Error");
         console.log(e);
-        return false;
+        return { auth: false, msg: e };
     }
 }
 
@@ -66,7 +78,7 @@ async function isLoggedIn() {
     return { auth: response.data.auth, username: "", id: "" };
 }
 
-async function fetchUserData(id, thumbnailDim) {
+async function fetchUserData(id: string, thumbnailDim: number) {
     const response = await Axios.get(`/${id}/${thumbnailDim}`);
     if (response) {
         const { username, _id, avatar, thumbnail } = response.data.user;

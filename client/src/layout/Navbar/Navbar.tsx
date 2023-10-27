@@ -3,18 +3,36 @@ import Nav from "react-bootstrap/Nav";
 import { default as Navigation } from "react-bootstrap/Navbar";
 import { LogoutAPI } from "../../apis/UserAPI";
 import { Outlet, useNavigate, useLoaderData } from "react-router-dom";
+import React from "react";
 
 import "../../assets/Navbar.css";
 
-export const Navbar = ({ status, change }) => {
+interface NavbarProps {
+    status: {
+        login: boolean;
+        username: string | null;
+        id: string | null;
+    };
+    change: (bool: boolean, username: string, id: string) => void;
+}
+
+interface userInfo {
+    auth?: boolean;
+    username?: string;
+    id?: string;
+    avatar?: string;
+    thumbnail?: string;
+}
+
+export const Navbar = ({ status, change }: NavbarProps) => {
     const navigate = useNavigate();
-    const info = useLoaderData();
+    const info: userInfo = useLoaderData();
     const handleLogout = async () => {
         await LogoutAPI();
         change(false, "", null);
         return navigate("/");
     };
-    const handleNav = (dir) => {
+    const handleNav = (dir: string) => {
         return () => navigate(`/${dir}`);
     };
     return (

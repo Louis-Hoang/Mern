@@ -1,6 +1,19 @@
 import Alert from "react-bootstrap/Alert";
+import React from "react";
 
-export const AlertMessage = ({ type, message, handleClose, show }) => {
+interface AlertMessageProps {
+    type: string;
+    message: string;
+    handleClose?: () => void;
+    show: boolean;
+}
+
+export const AlertMessage: React.FC<AlertMessageProps> = ({
+    type,
+    message,
+    handleClose,
+    show,
+}) => {
     const handleAlertClose = () => {
         if (handleClose) {
             handleClose(); // Call the onClose prop passed from the parent
